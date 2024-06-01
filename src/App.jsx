@@ -4,30 +4,59 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [cpayload, setcpayload] = useState("");
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const payload = Object.fromEntries(data);
+    setcpayload(payload);
+    console.log("data: ", payload);
+    if (payload.username == "user" && payload.password == "password") {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+
+    setSubmitted(true);
+  }
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h2>Login Page</h2>
+        {
+          !loggedIn && !submitted &&
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>Username: </label><input required type="text" name="username" placeholder='username' />
+            </div>
+            <div>
+              <label>Password: </label><input required type="password" placeholder='password' name="password" />
+            </div>
+            <button>Submit</button>
+          </form>
+        }
+        {
+          !loggedIn && submitted &&
+          <div>
+            <p>Invalid username or password</p>
+            <form onSubmit={handleSubmit}>
+              <div>
+                <label>Username: </label><input required type="text" name="username" placeholder='username' value={cpayload?.username} />
+              </div>
+              <div>
+                <label>Password: </label><input required type="password" placeholder='password' name="password" value={cpayload?.password} />
+              </div>
+              <button>Submit</button>
+            </form>
+          </div>
+        }
+        {
+          loggedIn && submitted && <p>Welcome, user!</p>
+        }
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
