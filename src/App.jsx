@@ -6,7 +6,10 @@ import './App.css'
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [cpayload, setcpayload] = useState("");
+  const [cpayload, setcpayload] = useState({
+    username:"",
+    password:""
+  });
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
@@ -44,10 +47,10 @@ function App() {
             <p>Invalid username or password</p>
             <form onSubmit={handleSubmit}>
               <div>
-                <label>Username: </label><input required type="text" name="username" placeholder='username' value={cpayload?.username} />
+                <label>Username: </label><input required type="text" name="username" placeholder='username' onChange={(event) => setcpayload(event.target.value)} value={cpayload?.username} />
               </div>
               <div>
-                <label>Password: </label><input required type="password" placeholder='password' name="password" value={cpayload?.password} />
+                <label>Password: </label><input required type="password" placeholder='password' name="password" onChange={(event) => setcpayload(event.target.value)} value={cpayload?.password} />
               </div>
               <button>Submit</button>
             </form>
