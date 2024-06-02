@@ -1,28 +1,20 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [cpayload, setcpayload] = useState({
-    username:"",
-    password:""
-  });
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    setSubmitted(true);
     const data = new FormData(event.target);
     const payload = Object.fromEntries(data);
-    setcpayload(payload);
-    console.log("data: ", payload);
     if (payload.username == "user" && payload.password == "password") {
       setLoggedIn(true);
     } else {
       setLoggedIn(false);
     }
-
-    setSubmitted(true);
   }
 
   return (
@@ -30,36 +22,24 @@ function App() {
       <div>
         <h2>Login Page</h2>
         {
-          !loggedIn && !submitted &&
-          <form onSubmit={handleSubmit}>
+          submitted && !loggedIn && <p>Invalid username or password</p>
+        }
+        {
+          !loggedIn &&
+          < form onSubmit={handleSubmit}>
             <div>
-              <label>Username: </label><input required type="text" name="username" placeholder='username' />
+              <label htmlFor='username'>Username:</label><input id="username" required type="text" name="username" placeholder='username' />
             </div>
             <div>
-              <label>Password: </label><input required type="password" placeholder='password' name="password" />
+              <label htmlFor='password'>Password: </label><input id="password" required type="password" placeholder='password' name="password" />
             </div>
             <button>Submit</button>
           </form>
         }
         {
-          !loggedIn && submitted &&
-          <div>
-            <p>Invalid username or password</p>
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label>Username: </label><input required type="text" name="username" placeholder='username' onChange={(event) => setcpayload(event.target.value)} value={cpayload?.username} />
-              </div>
-              <div>
-                <label>Password: </label><input required type="password" placeholder='password' name="password" onChange={(event) => setcpayload(event.target.value)} value={cpayload?.password} />
-              </div>
-              <button>Submit</button>
-            </form>
-          </div>
+          submitted && loggedIn && <p>Welcome, user!</p>
         }
-        {
-          loggedIn && submitted && <p>Welcome, user!</p>
-        }
-      </div>
+      </div >
     </>
   )
 }
